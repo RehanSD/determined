@@ -8,7 +8,7 @@ from determined.common.schemas.expconf import _gen
 _validators = {}  # type: Dict[str, Any]
 
 
-def make_validator(url: Optional[str] = None, complete: Optional[bool] = False) -> Any:
+def make_validator(url: Optional[str] = None, complete = False) -> Any:
     # Use the experiment config schema by default.
     if url is None:
         url = "http://determined.ai/schemas/expconf/v1/experiment.json"
@@ -37,6 +37,8 @@ def make_validator(url: Optional[str] = None, complete: Optional[bool] = False) 
     if complete:
         ext["eventuallyRequired"] = extensions.eventuallyRequired
         ext["eventually"] = extensions.eventually
+    print(complete)
+    print(ext)
 
     cls = jsonschema.validators.extend(validator, ext)
     _validators[url] = cls(schema=schema, resolver=resolver)
@@ -50,7 +52,8 @@ def sanity_validation_errors(instance: Any, url: Optional[str] = None) -> List[s
 
 
 def completeness_validation_errors(instance: Any, url: Optional[str] = None) -> List[str]:
-    validator = make_validator(url, complete=True)
+    validator = make_validator(complete=True, url=url)
+    print(validator)
     return _validate(instance, validator)
 
 

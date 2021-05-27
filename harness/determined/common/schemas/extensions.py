@@ -337,6 +337,7 @@ def eventually(
         }
     }
     """
+    print(eventually)
     yield from validator.descend(instance, schema=eventually, schema_path="eventually")
 
 
